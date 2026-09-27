@@ -1,17 +1,20 @@
-#Use a small base image
-
+# Use a small base image
 FROM node:18-alpine AS base
+
 WORKDIR /app
 
-#Install deps separately for caching
+# Install dependencies separately for caching
 COPY package.json package-lock.json* ./
-RUN npm ci --okit=dev
+RUN npm ci --omit=dev
 
-#Copy app source
-COPY ..
+# Copy app source
+COPY . .
 
-#Run as non-root (alpine node image includes user 'node')
+# Run as non-root (alpine node image includes user 'node')
 USER node
+
 EXPOSE 3000
+
 ENV NODE_ENV=production
-CMD {"npm", "start"}
+
+CMD ["npm", "start"]
